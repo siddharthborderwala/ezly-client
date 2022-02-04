@@ -1,10 +1,20 @@
+import { Button } from '@chakra-ui/react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 import useAuth from '../contexts/auth';
 
 const Home: NextPage = () => {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
+  const { replace } = useRouter();
+
+  useEffect(() => {
+    if (user === null) {
+      replace('/login');
+    }
+  }, [user]);
 
   return (
     <>
@@ -13,7 +23,10 @@ const Home: NextPage = () => {
         <meta name="description" content="Ezly | Link management" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <button onClick={logout}>Logout</button>
+      <h1>Welcome home!</h1>
+      <Button variant="solid" onClick={logout}>
+        Logout
+      </Button>
     </>
   );
 };

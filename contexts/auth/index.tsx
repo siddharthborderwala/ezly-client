@@ -33,49 +33,37 @@ export const AuthProvider: React.FC = ({ children }) => {
   const value: AuthContextValue = {
     user,
     logout: async () => {
-      try {
-        await axios.post('/v1/auth/logout');
-        if (process.env.NODE_ENV === 'development') {
-          localStorage.removeItem('token');
-        }
-      } catch (error) {
-        // handle errors
+      await axios.post('/v1/auth/logout');
+      if (process.env.NODE_ENV === 'development') {
+        localStorage.removeItem('token');
       }
     },
     login: async (email: string, password: string) => {
-      try {
-        const res = await axios.post<AuthResponsePayload>('/v1/auth/login', {
-          email,
-          password,
-        });
-        if (process.env.NODE_ENV === 'development') {
-          localStorage.setItem('token', res.data.token);
-        }
-        setUser(res.data.user);
-        return res.data;
-      } catch (error) {
-        // handle errors
+      const res = await axios.post<AuthResponsePayload>('/v1/auth/login', {
+        email,
+        password,
+      });
+      if (process.env.NODE_ENV === 'development') {
+        localStorage.setItem('token', res.data.token);
       }
+      setUser(res.data.user);
+      return res.data;
     },
     register: async (
       email: string,
       password: string,
       passwordConfirmation: string
     ) => {
-      try {
-        const res = await axios.post<AuthResponsePayload>('/v1/auth/register', {
-          email,
-          password,
-          passwordConfirmation,
-        });
-        if (process.env.NODE_ENV === 'development') {
-          localStorage.setItem('token', res.data.token);
-        }
-        setUser(res.data.user);
-        return res.data;
-      } catch (error) {
-        // handle errors
+      const res = await axios.post<AuthResponsePayload>('/v1/auth/register', {
+        email,
+        password,
+        passwordConfirmation,
+      });
+      if (process.env.NODE_ENV === 'development') {
+        localStorage.setItem('token', res.data.token);
       }
+      setUser(res.data.user);
+      return res.data;
     },
   };
 

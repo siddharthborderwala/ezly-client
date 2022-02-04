@@ -1,46 +1,78 @@
+import {
+  Box,
+  Button,
+  Center,
+  chakra,
+  FormControl,
+  FormLabel,
+  Input,
+  Link as ChakraLink,
+  Text,
+  useToast,
+} from '@chakra-ui/react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 import useAuth from '../contexts/auth';
 
+const Form = chakra.form;
+
 const LoginPage: React.FC = () => {
   const { login } = useAuth();
+  const { push } = useRouter();
+  const toast = useToast();
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     e.persist();
     const data = Object.fromEntries(new FormData(e.currentTarget).entries());
     try {
-      const result = await login(
-        data.email.toString(),
-        data.password.toString()
-      );
-      console.log(result);
-    } catch (error) {}
+      await login(data.email.toString(), data.password.toString());
+      push('/');
+    } catch (error) {
+      toast({
+        status: 'error',
+        title: 'Invalid credentials',
+      });
+    }
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            placeholder="johndoe@example.com"
-          />
-          <label htmlFor="email">Email</label>
-        </div>
-        <div>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            placeholder="password"
-          />
-          <label htmlFor="email">Password</label>
-        </div>
-        <button type="submit">Login</button>
-      </form>
-    </div>
+    <Center height="100vh" backgroundColor="gray.200">
+      <Box boxShadow="md" rounded="md" padding="6" backgroundColor="white">
+        <Form onSubmit={handleSubmit} experimental_spaceY="4">
+          <FormControl>
+            <FormLabel htmlFor="email">Email Address</FormLabel>
+            <Input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="johndoe@example.com"
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel htmlFor="password">Password</FormLabel>
+            <Input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="password"
+            />
+          </FormControl>
+          <Button variant="solid" type="submit">
+            Login
+          </Button>
+        </Form>
+        <Text marginTop="6">
+          New here?{' '}
+          <Link href="/register" passHref>
+            <ChakraLink textDecoration="underline" color="purple.500">
+              Register
+            </ChakraLink>
+          </Link>
+        </Text>
+      </Box>
+    </Center>
   );
 };
 

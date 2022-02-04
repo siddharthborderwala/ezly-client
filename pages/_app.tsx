@@ -1,13 +1,26 @@
-import { ChakraProvider } from '@chakra-ui/react';
 import axios from 'axios';
-import type { AppProps } from 'next/app';
 import { useEffect } from 'react';
+import type { AppProps } from 'next/app';
+import {
+  ChakraProvider,
+  extendTheme,
+  withDefaultColorScheme,
+} from '@chakra-ui/react';
 
 import { AuthProvider } from '../contexts/auth';
-import '../styles/globals.css';
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_BASE_URL as string;
 axios.defaults.withCredentials = process.env.NODE_ENV === 'production';
+
+const chakraTheme = extendTheme(
+  withDefaultColorScheme({ colorScheme: 'teal' }),
+  {
+    fonts: {
+      heading: 'Inter',
+      body: 'Inter',
+    },
+  }
+);
 
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   useEffect(() => {
@@ -30,7 +43,7 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   }, []);
 
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={chakraTheme}>
       <AuthProvider>
         <Component {...pageProps} />
       </AuthProvider>
