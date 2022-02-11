@@ -18,9 +18,13 @@ import useAuth from '../contexts/auth';
 const Form = chakra.form;
 
 const LoginPage: React.FC = () => {
-  const { login } = useAuth();
-  const { push } = useRouter();
+  const { login, user } = useAuth();
+  const { replace } = useRouter();
   const toast = useToast();
+
+  if (user) {
+    replace('/');
+  }
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
@@ -28,7 +32,7 @@ const LoginPage: React.FC = () => {
     const data = Object.fromEntries(new FormData(e.currentTarget).entries());
     try {
       await login(data.email.toString(), data.password.toString());
-      push('/');
+      replace('/');
     } catch (error) {
       toast({
         status: 'error',

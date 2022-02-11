@@ -1,5 +1,12 @@
+import { Center, Spinner } from '@chakra-ui/react';
 import axios from 'axios';
-import { createContext, useContext, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 type UserType = {
   id: string;
@@ -12,6 +19,7 @@ type AuthResponsePayload = {
 };
 
 type AuthContextValue = {
+  ready: boolean;
   user: UserType | null;
   login: (
     email: string,
@@ -29,14 +37,39 @@ const AuthContext = createContext<AuthContextValue>(null);
 
 export const AuthProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<UserType | null>(null);
+  const [ready, setReady] = useState<boolean>(false);
+
+  const getMe = useCallback(async () => {
+    try {
+      const { data } = await axios.get<UserType>('/v1/auth/me', {
+        headers:
+          process.env.NODE_ENV === 'development'
+            ? {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              }
+            : {},
+      });
+      setUser(data);
+    } catch {
+      setUser(null);
+    } finally {
+      setReady(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    getMe();
+  }, []);
 
   const value: AuthContextValue = {
+    ready,
     user,
     logout: async () => {
       await axios.post('/v1/auth/logout');
       if (process.env.NODE_ENV === 'development') {
         localStorage.removeItem('token');
       }
+      setUser(null);
     },
     login: async (email: string, password: string) => {
       const res = await axios.post<AuthResponsePayload>('/v1/auth/login', {
@@ -67,7 +100,17 @@ export const AuthProvider: React.FC = ({ children }) => {
     },
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {ready ? (
+        children
+      ) : (
+        <Center height="100vh" width="100vw" backgroundColor="gray.50">
+          <Spinner />
+        </Center>
+      )}
+    </AuthContext.Provider>
+  );
 };
 
 const useAuth = () => useContext<AuthContextValue>(AuthContext)!;

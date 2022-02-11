@@ -18,9 +18,13 @@ import useAuth from '../contexts/auth';
 const Form = chakra.form;
 
 const RegisterPage: React.FC = () => {
-  const { register } = useAuth();
-  const { push } = useRouter();
+  const { register, user } = useAuth();
+  const { replace } = useRouter();
   const toast = useToast();
+
+  if (user) {
+    replace('/');
+  }
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
@@ -32,7 +36,7 @@ const RegisterPage: React.FC = () => {
         data.password.toString(),
         data.passwordConfirmation.toString()
       );
-      push('/');
+      replace('/');
     } catch (error) {
       toast({
         status: 'error',
