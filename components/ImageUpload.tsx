@@ -11,7 +11,7 @@ const getFileExtension = (fileName: string) => {
 
 interface ImageUploadProps {
   setPageData: React.Dispatch<React.SetStateAction<IPageData>>;
-  pageData: IPageData;
+  pageData?: IPageData;
 }
 
 const ImageUpload = ({ setPageData }: ImageUploadProps) => {
@@ -51,8 +51,6 @@ const ImageUpload = ({ setPageData }: ImageUploadProps) => {
           });
         })
       );
-
-      //   return imageUrl;
     } catch (err) {
       console.log(err);
     }
