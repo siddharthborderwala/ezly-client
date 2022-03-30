@@ -6,10 +6,23 @@ import ImageUpload from '../components/ImageUpload';
 import { nanoid } from 'nanoid';
 import ModalContainer from '../components/ModalContainer';
 import CreateParagraph from '../components/CreateParagraph';
-import ReactDOMServer from 'react-dom/server';
 import UpdateSocial from '../components/UpdateSocial';
+import Reorder from '../components/Reorder';
+import CreateLinkMaker from '../components/CreateLinkMaker';
 
 type SocialName = 'instagram' | 'youtube' | 'facebook' | 'linkedin';
+
+export interface IBlock {
+  type: string;
+  id: string;
+  data: {
+    text?: string;
+    url?: string;
+    // TODO Fix this later
+    platforms?: any;
+    name?: string;
+  };
+}
 
 export interface IPageData {
   meta: [
@@ -22,16 +35,7 @@ export interface IPageData {
       id: string;
     }
   ];
-  blocks: {
-    type: string;
-    id: string;
-    data: {
-      text?: string;
-      url?: string;
-      // TODO Fix this later
-      platforms?: any;
-    };
-  }[];
+  blocks: IBlock[];
 }
 
 const initialPageData: IPageData = {
@@ -78,14 +82,6 @@ const Maker: React.FC = () => {
     return 'hsla(0, 0%, 100%, 1)';
   };
 
-  //   useEffect(() => {
-  //     const x = ReactDOMServer.renderToStaticMarkup(
-  //       <ModalContainer heading="hello" />
-  //     );
-
-  //     console.log(x);
-  //   }, []);
-
   return (
     <Grid minH="100vh" templateColumns="repeat(3,1fr)">
       <Box bg="whitesmoke">
@@ -126,9 +122,15 @@ const Maker: React.FC = () => {
           <ModalContainer heading="Update/Add Socials">
             <UpdateSocial pageData={pageData} setPageData={setPageData} />
           </ModalContainer>
+
+          <ModalContainer heading="Create Link">
+            <CreateLinkMaker setPageData={setPageData} />
+          </ModalContainer>
         </Flex>
       </Box>
-      <Box bg="papayawhip">Reorder</Box>
+      <Box bg="papayawhip">
+        <Reorder pageData={pageData} setPageData={setPageData} />
+      </Box>
       <Box bg="whatsapp.100">
         <pre>{JSON.stringify(pageData, null, 2)}</pre>
       </Box>
