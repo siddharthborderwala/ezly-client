@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { IPageData } from '../pages/maker';
+import { IPageData } from '../pages/profile';
 import produce from 'immer';
 import { nanoid } from 'nanoid';
 
@@ -42,13 +42,7 @@ const ImageUpload = ({ setPageData }: ImageUploadProps) => {
 
       setPageData(
         produce((draft) => {
-          draft.blocks.push({
-            id: nanoid(),
-            type: 'img',
-            data: {
-              url: imageUrl,
-            },
-          });
+          draft.meta.image = imageUrl;
         })
       );
     } catch (err) {

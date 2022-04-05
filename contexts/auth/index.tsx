@@ -59,7 +59,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     getMe();
-  }, []);
+  }, [getMe]);
 
   const value: AuthContextValue = {
     ready,
@@ -113,6 +113,4 @@ export const AuthProvider: React.FC = ({ children }) => {
   );
 };
 
-const useAuth = () => useContext<AuthContextValue>(AuthContext)!;
-
-export default useAuth;
+export const useAuth = () => useContext<AuthContextValue>(AuthContext)!;
