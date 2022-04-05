@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { useRouter } from 'next/router';
 import {
-  Box,
   Button,
   Flex,
   Heading,
@@ -22,7 +21,9 @@ import {
 } from 'phosphor-react';
 
 const Sidebar = () => {
-  const { isOpen, onToggle } = useDisclosure();
+  const { isOpen, onToggle } = useDisclosure({
+    defaultIsOpen: true,
+  });
   const { pathname } = useRouter();
 
   const activeTabName = useMemo(() => pathname.split('/')[1], [pathname]);
