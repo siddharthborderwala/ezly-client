@@ -1,5 +1,5 @@
 import React from 'react';
-import { IBlock, IPageData } from '../pages/maker';
+import { IPageData, LinkBlock } from '../pages/profile';
 import * as R from 'ramda';
 import { Box } from '@chakra-ui/react';
 
@@ -17,7 +17,7 @@ type ReorderProps = {
 };
 
 type ListItemProps = {
-  item: IBlock;
+  item: LinkBlock;
   provided: DraggableProvided;
   snapshot: DraggableStateSnapshot;
 };
@@ -44,8 +44,8 @@ const Reorder: React.FC<ReorderProps> = ({ pageData, setPageData }) => {
     }
 
     const newData = R.clone(pageData);
-    const [removed] = newData.blocks.splice(result.source.index, 1);
-    newData.blocks.splice(result.destination.index, 0, removed);
+    const [removed] = newData.links.splice(result.source.index, 1);
+    newData.links.splice(result.destination.index, 0, removed);
 
     setPageData(newData);
   };
@@ -57,7 +57,7 @@ const Reorder: React.FC<ReorderProps> = ({ pageData, setPageData }) => {
           {(provided) => {
             return (
               <div {...provided.droppableProps} ref={provided.innerRef}>
-                {pageData.blocks.map((item, index) => (
+                {pageData.links.map((item, index) => (
                   <Draggable key={item.id} draggableId={item.id} index={index}>
                     {(provided, snapshot) => (
                       <ListItem

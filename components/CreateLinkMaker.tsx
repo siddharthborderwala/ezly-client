@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { Input, Button, useToast } from '@chakra-ui/react';
 import { nanoid } from 'nanoid';
-import { IPageData } from '../pages/maker';
+import { IPageData } from '../pages/profile';
 import produce from 'immer';
 
 function isValidUrl(_string: string) {
@@ -45,13 +45,10 @@ const CreateLinkMaker: React.FC<CreateLinkMakerProps> = ({ setPageData }) => {
       // add to json
       setPageData(
         produce((draft) => {
-          draft.blocks.push({
+          draft.links.push({
             id: nanoid(),
-            type: 'link',
-            data: {
-              name,
-              url: data.shortUrl,
-            },
+            title: name,
+            url: data.shortUrl,
           });
         })
       );

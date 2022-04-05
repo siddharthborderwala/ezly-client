@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { useEffect } from 'react';
 import type { AppProps } from 'next/app';
 import {
   ChakraProvider,
@@ -7,7 +6,9 @@ import {
   withDefaultColorScheme,
 } from '@chakra-ui/react';
 
+import { layoutsMap } from '../layouts';
 import { AuthProvider } from '../contexts/auth';
+import useDevAuthPlugin from '../hooks/useDevAuthPlugin';
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_BASE_URL as string;
 axios.defaults.withCredentials = process.env.NODE_ENV === 'production';
@@ -22,30 +23,26 @@ const chakraTheme = extendTheme(
   }
 );
 
-const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
-  useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
-      // in development mode using a JWT from an http secure cookie is not possible
-      // so we store the JWT in localStorage with the 'token' key
-      // we add an interceptor to add the authorization header
-      const id = axios.interceptors.request.use((config) => {
-        config.headers = {
-          ...config.headers,
-          authorization: `Bearer ${localStorage.getItem('token')}`,
-        };
-        return config;
-      });
+type CustomAppProps = AppProps & {
+  Component: {
+    layout?: keyof typeof layoutsMap;
+  };
+};
 
-      return () => {
-        axios.interceptors.request.eject(id);
-      };
-    }
-  }, []);
+const DefaultLayout: React.FC = ({ children }) => <>{children}</>;
+
+const MyApp: React.FC<CustomAppProps> = ({ Component, pageProps }) => {
+  useDevAuthPlugin();
+  const Layout = Component.layout
+    ? layoutsMap[Component.layout]
+    : DefaultLayout;
 
   return (
     <ChakraProvider theme={chakraTheme}>
       <AuthProvider>
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </AuthProvider>
     </ChakraProvider>
   );
