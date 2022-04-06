@@ -13,7 +13,7 @@ import {
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import useAuth from '../contexts/auth';
+import { useAuth } from '../contexts/auth';
 
 const Form = chakra.form;
 
