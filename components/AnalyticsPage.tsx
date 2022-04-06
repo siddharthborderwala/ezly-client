@@ -50,6 +50,8 @@ const AnalyticsPage: React.FC<{ alias: string }> = (props) => {
   const [linkData, setLinkData]: [linkStat, (stats: linkStat) => void] =
     useState<linkStat>(defaultStats);
 
+  const [error, setError]: [string, (error: string) => void] = useState('');
+
   const [loading, setLoading]: [boolean, (loading: boolean) => void] =
     useState<boolean>(true);
 
@@ -65,6 +67,7 @@ const AnalyticsPage: React.FC<{ alias: string }> = (props) => {
           e.response.status === 404
             ? 'Resource Not found'
             : 'An unexpected error has occurred';
+        setError(err);
         setLoading(false);
       });
   }, [props.alias]);
@@ -76,6 +79,11 @@ const AnalyticsPage: React.FC<{ alias: string }> = (props) => {
           {/* add loading animation} */}
           <h2>Loading</h2>
           <p>Please wait</p>
+        </>
+      ) : error ? (
+        <>
+          {/* add 404 page */}
+          <h2>{error}</h2>
         </>
       ) : (
         <>
@@ -89,19 +97,19 @@ const AnalyticsPage: React.FC<{ alias: string }> = (props) => {
             gap={4}
           >
             <GridItem rowSpan={2} colSpan={4}>
-              <CountryVisualization data={linkData.analytics.countries} />
+              <CountryVisualization data={linkData.analytics.countries || []} />
             </GridItem>
             <GridItem colSpan={2}>
-              <PieChart data={linkData.analytics.browsers} />
+              <PieChart data={linkData.analytics.browsers || []} />
             </GridItem>
             <GridItem colSpan={2}>
-              <PieChart data={linkData.analytics.referers} />
+              <PieChart data={linkData.analytics.referers || []} />
             </GridItem>
             <GridItem colSpan={3}>
-              <PieChart data={linkData.analytics.devices} />
+              <PieChart data={linkData.analytics.devices || []} />
             </GridItem>
             <GridItem colSpan={3}>
-              <PieChart data={linkData.analytics.operatingSystems} />
+              <PieChart data={linkData.analytics.operatingSystems || []} />
             </GridItem>
           </Grid>
         </>
