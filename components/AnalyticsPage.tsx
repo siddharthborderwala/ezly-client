@@ -2,7 +2,18 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import CountryVisualization from './CountryVisualization';
 import PieChart from './PieChart';
-import { Grid, GridItem } from '@chakra-ui/react';
+import {
+  ChakraProvider,
+  Box,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  Flex,
+  Spinner,
+  Text,
+  Center,
+  useColorModeValue,
+} from '@chakra-ui/react';
 
 interface linkStat {
   url: string;
@@ -55,6 +66,9 @@ const AnalyticsPage: React.FC<{ alias: string }> = (props) => {
   const [loading, setLoading]: [boolean, (loading: boolean) => void] =
     useState<boolean>(true);
 
+  const mainText = useColorModeValue('gray.700', 'gray.200');
+  const secondaryText = useColorModeValue('gray.400', 'gray.200');
+
   React.useEffect(() => {
     axios
       .get(`/v1/track/${props.alias}`)
@@ -75,44 +89,119 @@ const AnalyticsPage: React.FC<{ alias: string }> = (props) => {
   return (
     <>
       {loading ? (
-        <>
-          {/* add loading animation} */}
-          <h2>Loading</h2>
-          <p>Please wait</p>
-        </>
+        <Center h="100%">
+          <Spinner />
+        </Center>
       ) : error ? (
         <>
           {/* add 404 page */}
           <h2>{error}</h2>
         </>
       ) : (
-        <>
-          <h2>Analytics for {linkData.url}</h2>
-          <p>In collection {linkData.collection}</p>
-          <p>alias = {linkData.alias}</p>
-          <Grid
-            h="100vh"
-            templateRows="repeat(, 1fr)"
-            templateColumns="repeat(6, 1fr)"
-            gap={4}
-          >
-            <GridItem rowSpan={2} colSpan={4}>
-              <CountryVisualization data={linkData.analytics.countries || []} />
-            </GridItem>
-            <GridItem colSpan={2}>
-              <PieChart data={linkData.analytics.browsers || []} />
-            </GridItem>
-            <GridItem colSpan={2}>
-              <PieChart data={linkData.analytics.referers || []} />
-            </GridItem>
-            <GridItem colSpan={3}>
-              <PieChart data={linkData.analytics.devices || []} />
-            </GridItem>
-            <GridItem colSpan={3}>
-              <PieChart data={linkData.analytics.operatingSystems || []} />
-            </GridItem>
-          </Grid>
-        </>
+        <ChakraProvider resetCSS>
+          <Box width="full" height="full">
+            <Flex justifyContent="space-between" m="2" p="2">
+              <Breadcrumb>
+                <BreadcrumbItem color={mainText}>
+                  <BreadcrumbLink href="/analytics">Analytics</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbItem color={mainText}>
+                  <BreadcrumbLink
+                    href={`\\${linkData.alias}`}
+                    target="_blank"
+                    color={secondaryText}
+                  >
+                    {linkData.alias}
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+              </Breadcrumb>
+              <Box>Total clicks = {linkData.clicks}</Box>
+            </Flex>
+            <Flex justifyContent="space-around" h="55%">
+              <Box
+                display="flex"
+                flexDirection="column"
+                w="100%"
+                borderWidth="2px"
+                m="1"
+              >
+                <Box>
+                  <Text textAlign="center" color={mainText} p="1">
+                    Countries
+                  </Text>
+                </Box>
+                <Box h="100%">
+                  <CountryVisualization
+                    data={linkData.analytics.countries || []}
+                  />
+                </Box>
+              </Box>
+              <Box
+                display="flex"
+                flexDirection="column"
+                borderWidth="2px"
+                w="45%"
+                m="1"
+              >
+                <Box>
+                  <Text textAlign="center" color={mainText} p="1">
+                    Browsers
+                  </Text>
+                </Box>
+                <Box h="100%">
+                  <PieChart data={linkData.analytics.browsers || []} />
+                </Box>
+              </Box>
+            </Flex>
+            <Flex justifyContent="space-around" h="35%">
+              <Box
+                display="flex"
+                flexDirection="column"
+                w="33%"
+                borderWidth="2px"
+              >
+                <Box>
+                  <Text textAlign="center" color={mainText} p="1">
+                    Referers
+                  </Text>
+                </Box>
+                <Box h="100%">
+                  <PieChart data={linkData.analytics.referers || []} />
+                </Box>
+              </Box>
+              <Box
+                display="flex"
+                flexDirection="column"
+                w="33%"
+                borderWidth="2px"
+              >
+                <Box>
+                  <Text textAlign="center" color={mainText} p="1">
+                    Devices
+                  </Text>
+                </Box>
+                <Box h="100%">
+                  <PieChart data={linkData.analytics.devices || []} />
+                </Box>
+              </Box>
+              <Box
+                display="flex"
+                flexDirection="column"
+                w="33%"
+                borderWidth="2px"
+              >
+                <Box>
+                  <Text textAlign="center" color={mainText} p="1">
+                    Operating systems
+                  </Text>
+                </Box>
+                <Box h="100%">
+                  <PieChart data={linkData.analytics.operatingSystems || []} />
+                </Box>
+              </Box>
+            </Flex>
+          </Box>
+        </ChakraProvider>
       )}
     </>
   );
