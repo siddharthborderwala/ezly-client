@@ -4,9 +4,9 @@ import Sidebar from './sidebar';
 
 const DashboardLayout: React.FC = ({ children }) => {
   return (
-    <Flex as="main">
+    <Flex as="main" height="100vh">
       <Sidebar />
-      <Box flexGrow="1" padding="4">
+      <Box flexGrow="1" padding="4" overflowY="scroll">
         {children}
       </Box>
     </Flex>
