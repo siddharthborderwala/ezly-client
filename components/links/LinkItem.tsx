@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Spacer } from '@chakra-ui/react';
+import { Box, Button, Flex, Spacer, useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import React from 'react';
 import { mutate } from 'swr';
@@ -14,11 +14,32 @@ const LinkItem: React.FC<LinkItemProps> = ({
   linkData,
   collectionName,
 }) => {
-  console.log(linkData);
+  const toast = useToast();
 
   const handleDelete = async () => {
-    await axios.delete(`/v1/links`);
-    await mutate(`/v1/collections/${collectionName}`);
+    try {
+      await axios({
+        method: 'delete',
+        url: `/v1/links`,
+        data: {
+          linkId: id,
+        },
+      });
+
+      await mutate(`/v1/collections/${collectionName}`);
+
+      toast({
+        title: 'link deleted successfully',
+        status: 'success',
+        isClosable: true,
+      });
+    } catch (err) {
+      toast({
+        title: 'link could not be deleted',
+        status: 'error',
+        isClosable: true,
+      });
+    }
   };
 
   return (

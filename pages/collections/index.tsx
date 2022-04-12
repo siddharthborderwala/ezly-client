@@ -36,25 +36,24 @@ const CollectionsList: LayoutPage = () => {
       <Head>
         <title>All Collections</title>
       </Head>
-      {data?.data.collections.map((collection: any) => {
-        return (
-          <Box
-            padding="4"
-            border="1px"
-            margin="4"
-            maxWidth="30%"
-            borderColor="gray.200"
-            borderRadius="2xl"
-            backgroundColor="gray.50"
-            fontWeight="semibold"
-            cursor="pointer"
-            id={collection.id}
-            onClick={() => handleClick(collection.name)}
-          >
-            {collection.name}
-          </Box>
-        );
-      })}
+      {data?.data.collections.map((collection: any) => (
+        <Box
+          key={collection.id}
+          padding="4"
+          border="1px"
+          margin="4"
+          maxWidth="30%"
+          borderColor="gray.200"
+          borderRadius="2xl"
+          backgroundColor="gray.50"
+          fontWeight="semibold"
+          cursor="pointer"
+          id={collection.id}
+          onClick={() => handleClick(collection.name)}
+        >
+          {collection.name}
+        </Box>
+      ))}
     </>
   );
 };
