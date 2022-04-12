@@ -58,13 +58,11 @@ const AnalyticsPage: React.FC<{ alias: string }> = (props) => {
     },
   };
 
-  const [linkData, setLinkData]: [linkStat, (stats: linkStat) => void] =
-    useState<linkStat>(defaultStats);
+  const [linkData, setLinkData] = useState<linkStat>(defaultStats);
 
-  const [error, setError]: [string, (error: string) => void] = useState('');
+  const [error, setError] = useState('');
 
-  const [loading, setLoading]: [boolean, (loading: boolean) => void] =
-    useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
 
   const mainText = useColorModeValue('gray.700', 'gray.200');
   const secondaryText = useColorModeValue('gray.400', 'gray.200');
