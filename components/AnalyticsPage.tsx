@@ -42,7 +42,9 @@ interface linkStat {
   };
 }
 
-const AnalyticsPage: React.FC<{ alias: string }> = (props) => {
+const AnalyticsPage: React.FC<{ alias: string; collection: string }> = (
+  props
+) => {
   const defaultStats: linkStat = {
     url: '',
     alias: '',
@@ -101,7 +103,17 @@ const AnalyticsPage: React.FC<{ alias: string }> = (props) => {
             <Flex justifyContent="space-between" m="2" p="2">
               <Breadcrumb>
                 <BreadcrumbItem color={mainText}>
-                  <BreadcrumbLink href="/analytics">Analytics</BreadcrumbLink>
+                  <BreadcrumbLink href="/collections">
+                    Collections
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbItem color={secondaryText}>
+                  <BreadcrumbLink href={`/collections/${props.collection}`}>
+                    {props.collection}
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbItem color={mainText}>
+                  <Text>Analytics</Text>
                 </BreadcrumbItem>
                 <BreadcrumbItem color={mainText}>
                   <BreadcrumbLink

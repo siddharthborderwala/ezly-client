@@ -66,12 +66,12 @@ const Sidebar = () => {
           </Tooltip>
           {isOpen && <Text ml="4">Collections</Text>}
         </NavLink>
-        <NavLink href="/analytics" active={activeTabName === 'analytics'}>
+        {/* <NavLink href="/analytics" active={activeTabName === 'analytics'}>
           <Tooltip label="Analytics" hasArrow placement="right">
             <ChartLineUp weight="bold" />
           </Tooltip>
           {isOpen && <Text ml="4">Analytics</Text>}
-        </NavLink>
+        </NavLink> */}
         <NavLink href="/profile" active={activeTabName === 'profile'}>
           <Tooltip label="Profile" hasArrow placement="right">
             <User weight="bold" />

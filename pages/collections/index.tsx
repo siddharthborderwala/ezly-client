@@ -4,7 +4,7 @@ import { LayoutPage } from '../../types/ui';
 import axios from 'axios';
 import useSWR from 'swr';
 import { Spinner, Box } from '@chakra-ui/react';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 
 const CollectionsList: LayoutPage = () => {
   const { data, error } = useSWR('/v1/collections/all', axios);

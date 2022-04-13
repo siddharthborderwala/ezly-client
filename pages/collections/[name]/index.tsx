@@ -13,9 +13,9 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import useSWR from 'swr';
-import CreateLink from '../../components/links/CreateLink';
-import LinkItem from '../../components/links/LinkItem';
-import { LayoutPage } from '../../types/ui';
+import CreateLink from '../../../components/links/CreateLink';
+import LinkItem from '../../../components/links/LinkItem';
+import { LayoutPage } from '../../../types/ui';
 
 const CollectionItemPage: LayoutPage = () => {
   const { name } = useRouter().query as any;

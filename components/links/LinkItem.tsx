@@ -2,6 +2,7 @@ import { Box, Button, Flex, Spacer, useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import React from 'react';
 import { mutate } from 'swr';
+import { useRouter } from 'next/router';
 
 type LinkItemProps = {
   id: string;
@@ -15,6 +16,8 @@ const LinkItem: React.FC<LinkItemProps> = ({
   collectionName,
 }) => {
   const toast = useToast();
+
+  const router = useRouter();
 
   const handleDelete = async () => {
     try {
@@ -42,6 +45,10 @@ const LinkItem: React.FC<LinkItemProps> = ({
     }
   };
 
+  const handleAnalytics = (alias: string) => {
+    router.push(`${collectionName}/analytics/${alias}`);
+  };
+
   return (
     <Flex
       padding="4"
@@ -52,6 +59,9 @@ const LinkItem: React.FC<LinkItemProps> = ({
       <Box>{linkData.url}</Box>
       <Box paddingLeft="4">{linkData.short_url}</Box>
       <Spacer />
+      <Button onClick={() => handleAnalytics(linkData.short_url)}>
+        Analytics
+      </Button>
       <Button onClick={handleDelete}>Delete</Button>
     </Flex>
   );
