@@ -1,10 +1,11 @@
-import Head from 'next/head';
-import React from 'react';
-import { LayoutPage } from '../../types/ui';
+import { Box, Divider, Heading, Spinner } from '@chakra-ui/react';
 import axios from 'axios';
-import useSWR from 'swr';
-import { Spinner, Box } from '@chakra-ui/react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
+import React from 'react';
+import useSWR from 'swr';
+import CreateCollection from '../../components/collections/CreateCollection';
+import { LayoutPage } from '../../types/ui';
 
 const CollectionsList: LayoutPage = () => {
   const { data, error } = useSWR('/v1/collections/all', axios);
@@ -36,12 +37,19 @@ const CollectionsList: LayoutPage = () => {
       <Head>
         <title>All Collections</title>
       </Head>
+
+      <Heading>Collections</Heading>
+
+      <Divider />
+
+      <CreateCollection />
+
       {data?.data.collections.map((collection: any) => (
         <Box
           key={collection.id}
           padding="4"
           border="1px"
-          margin="4"
+          marginBottom="2"
           maxWidth="30%"
           borderColor="gray.200"
           borderRadius="2xl"
