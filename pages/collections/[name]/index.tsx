@@ -1,12 +1,16 @@
 import {
-  Box,
-  Button,
-  Divider,
-  Flex,
-  Heading,
-  Spacer,
-  Spinner,
-  useToast,
+    Box,
+    Button,
+    Divider,
+    Flex,
+    Heading,
+    Spacer,
+    Spinner,
+    Table, TableContainer,
+    Tbody, Th,
+    Thead,
+    Tr,
+    useToast
 } from '@chakra-ui/react';
 import axios from 'axios';
 import Head from 'next/head';
@@ -68,8 +72,6 @@ const CollectionItemPage: LayoutPage = () => {
     }
   };
 
-  const handleUpdate = () => {};
-
   return (
     <>
       <Head>
@@ -84,14 +86,28 @@ const CollectionItemPage: LayoutPage = () => {
         <Divider />
         <CreateLink collectionName={name} />
         <Divider />
-        {data.data.collection.links.map((link: any) => (
-          <LinkItem
-            key={link.id}
-            id={link.id}
-            linkData={link}
-            collectionName={name}
-          />
-        ))}
+        <TableContainer>
+          <Table variant="striped" colorScheme="teal">
+            <Thead>
+              <Tr>
+                <Th>URL</Th>
+                <Th>Short Url</Th>
+                <Th>Analytics</Th>
+                <Th>Delete</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {data.data.collection.links.map((link: any) => (
+                <LinkItem
+                  key={link.id}
+                  id={link.id}
+                  linkData={link}
+                  collectionName={name}
+                />
+              ))}
+            </Tbody>
+          </Table>
+        </TableContainer>
       </Box>
     </>
   );

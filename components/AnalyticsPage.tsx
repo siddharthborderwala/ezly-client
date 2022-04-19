@@ -71,7 +71,7 @@ const AnalyticsPage: React.FC<{ alias: string; collection: string }> = (
 
   React.useEffect(() => {
     axios
-      .get(`/v1/track/${props.alias}`)
+      .get(`/v1/stats/${props.alias}`)
       .then((res) => {
         setLinkData(res.data.stats);
         setLoading(false);
