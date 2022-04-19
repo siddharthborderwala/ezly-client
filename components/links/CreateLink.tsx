@@ -1,7 +1,16 @@
-import { useToast, Heading, Input, Checkbox, Button } from '@chakra-ui/react';
+import {
+  useToast,
+  Heading,
+  Input,
+  Checkbox,
+  Button,
+  Flex,
+  Box,
+} from '@chakra-ui/react';
 import axios from 'axios';
 import { useState } from 'react';
 import { useSWRConfig } from 'swr';
+import validator from 'validator';
 
 type CreateLink = {
   collectionName: string;
@@ -20,9 +29,28 @@ const CreateLink: React.FC<CreateLink> = ({ collectionName }) => {
   const handleCreateLink = async () => {
     setLoading(true);
 
-    if (url.length == 0) {
+    if (!validator.isURL(url)) {
+      toast({
+        title: 'invalid url',
+        status: 'error',
+        description: 'type a valid url',
+        isClosable: true,
+      });
       setLoading(false);
       return;
+    }
+
+    if (isAlias) {
+      if (!validator.isAlphanumeric(alias)) {
+        toast({
+          title: 'invalid alias',
+          status: 'error',
+          description: 'only alpha numeric characterics allowed as the alias',
+          isClosable: true,
+        });
+        setLoading(false);
+        return;
+      }
     }
 
     try {
@@ -53,29 +81,37 @@ const CreateLink: React.FC<CreateLink> = ({ collectionName }) => {
   };
 
   return (
-    <>
-      <Heading size="lg" marginTop="4">
+    <Box margin="2">
+      <Heading size="lg" marginTop="4" marginBottom="2">
         Create Link
       </Heading>
 
       <Input placeholder="link here" onChange={(e) => setUrl(e.target.value)} />
 
-      <Checkbox
-        isChecked={isAlias}
-        onChange={(e) => setIsAlias(e.target.checked)}
-      >
-        Set Alias?
-      </Checkbox>
-      <Input
-        placeholder="alias here"
-        isDisabled={!isAlias}
-        onChange={(e) => setAlias(e.target.value)}
-      />
+      <Flex marginBottom="2" marginTop="2" alignItems="center">
+        <Checkbox
+          isChecked={isAlias}
+          onChange={(e) => setIsAlias(e.target.checked)}
+          display="block"
+          width="150px"
+        >
+          Set Alias?
+        </Checkbox>
+        <Input
+          placeholder="alias here"
+          isDisabled={!isAlias}
+          onChange={(e) => setAlias(e.target.value)}
+        />
+      </Flex>
 
-      <Button disabled={loading} onClick={(e) => handleCreateLink()}>
+      <Button
+        disabled={loading}
+        onClick={(e) => handleCreateLink()}
+        width="100%"
+      >
         Create Link
       </Button>
-    </>
+    </Box>
   );
 };
 
