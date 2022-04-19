@@ -13,6 +13,11 @@ import {
   Text,
   Center,
   useColorModeValue,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  useToast,
 } from '@chakra-ui/react';
 
 interface linkStat {
@@ -69,12 +74,22 @@ const AnalyticsPage: React.FC<{ alias: string; collection: string }> = (
   const mainText = useColorModeValue('gray.700', 'gray.200');
   const secondaryText = useColorModeValue('gray.400', 'gray.200');
 
+  const toast = useToast();
+
   React.useEffect(() => {
     axios
-      .get(`/v1/track/${props.alias}`)
+      .get(`/v1/stats/${props.alias}`)
       .then((res) => {
         setLinkData(res.data.stats);
         setLoading(false);
+        if (!res.data.stats.clicks) {
+          toast({
+            title: 'No stats found',
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+          });
+        }
       })
       .catch((e) => {
         const err =
@@ -84,7 +99,7 @@ const AnalyticsPage: React.FC<{ alias: string; collection: string }> = (
         setError(err);
         setLoading(false);
       });
-  }, [props.alias]);
+  }, [props.alias, toast]);
 
   return (
     <>
@@ -94,8 +109,21 @@ const AnalyticsPage: React.FC<{ alias: string; collection: string }> = (
         </Center>
       ) : error ? (
         <>
-          {/* add 404 page */}
-          <h2>{error}</h2>
+          <Alert
+            status="error"
+            variant="subtle"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            textAlign="center"
+            height="200px"
+          >
+            <AlertIcon boxSize="40px" mr={0} />
+            <AlertTitle mt={4} mb={1} fontSize="lg">
+              Error Fetching Data
+            </AlertTitle>
+            <AlertDescription maxWidth="sm">{error}</AlertDescription>
+          </Alert>
         </>
       ) : (
         <ChakraProvider resetCSS>
