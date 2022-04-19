@@ -1,5 +1,6 @@
 import { Center, Spinner } from '@chakra-ui/react';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 import {
   createContext,
   useCallback,
@@ -38,6 +39,7 @@ const AuthContext = createContext<AuthContextValue>(null);
 export const AuthProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<UserType | null>(null);
   const [ready, setReady] = useState<boolean>(false);
+  const { replace } = useRouter();
 
   const getMe = useCallback(async () => {
     try {
@@ -58,8 +60,8 @@ export const AuthProvider: React.FC = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    getMe();
-  }, [getMe]);
+    getMe().catch(() => replace('/login'));
+  }, []);
 
   const value: AuthContextValue = {
     ready,
