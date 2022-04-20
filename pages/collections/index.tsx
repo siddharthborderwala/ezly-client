@@ -1,14 +1,17 @@
-import { Box, Divider, Heading, Spinner } from '@chakra-ui/react';
+import { Box, Divider, Heading, Spinner, Spacer, Flex } from '@chakra-ui/react';
+import { AddIcon } from '@chakra-ui/icons';
 import axios from 'axios';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 import useSWR from 'swr';
 import CreateCollection from '../../components/collections/CreateCollection';
 import { LayoutPage } from '../../types/ui';
 
 const CollectionsList: LayoutPage = () => {
   const { data, error } = useSWR('/v1/collections/all', axios);
+
+  const [show, setShow] = useState(false);
 
   const router = useRouter();
 
@@ -38,18 +41,26 @@ const CollectionsList: LayoutPage = () => {
         <title>All Collections</title>
       </Head>
 
-      <Heading>Collections</Heading>
+      <Flex alignItems="center" justifyContent="center">
+        <Heading>Collections</Heading>
+        <Spacer />
+        <AddIcon
+          onClick={() => setShow(!show)}
+          boxSize="1.5em"
+          cursor="pointer"
+        />
+      </Flex>
 
       <Divider />
 
-      <CreateCollection />
+      {show && <CreateCollection setShow={setShow} />}
 
       {data?.data.collections.map((collection: any) => (
         <Box
           key={collection.id}
           padding="4"
           border="1px"
-          marginBottom="2"
+          marginTop="2"
           maxWidth="30%"
           borderColor="gray.200"
           borderRadius="2xl"

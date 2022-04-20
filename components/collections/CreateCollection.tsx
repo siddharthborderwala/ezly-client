@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Heading, useToast, Box, Input, Button } from '@chakra-ui/react';
+import { Heading, useToast, Box, Input, Button, Flex } from '@chakra-ui/react';
 import { useSWRConfig } from 'swr';
 
-const CreateCollection: React.FC = () => {
+type CreateCollectionProps = {
+  setShow: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const CreateCollection: React.FC<CreateCollectionProps> = ({ setShow }) => {
   const [name, setName] = useState('');
 
   const toast = useToast();
@@ -38,6 +42,7 @@ const CreateCollection: React.FC = () => {
       });
     } finally {
       setLoading(false);
+      setShow(false);
     }
   };
 
@@ -46,16 +51,16 @@ const CreateCollection: React.FC = () => {
       <Heading marginTop="4" size="lg">
         Create Collection
       </Heading>
-      <Box>
+      <Flex marginTop="1em" marginBottom="1em">
         <Input
           onChange={(e) => setName(e.target.value)}
           placeholder="collection name here"
         />
 
-        <Button isDisabled={loading} onClick={handleCreate}>
+        <Button isDisabled={loading} onClick={handleCreate} marginLeft="1em">
           Create Collection
         </Button>
-      </Box>
+      </Flex>
     </>
   );
 };
