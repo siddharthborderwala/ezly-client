@@ -1,17 +1,43 @@
 import { createIcon } from '@chakra-ui/icons';
 
-export const WalletIcon = createIcon({
-  displayName: 'WalletIcon',
+export const GlobeIcon = createIcon({
+  displayName: 'GlobeIcon',
   viewBox: '0 0 24 24',
   path: (
     <g>
       <path
-        fill="currentColor"
-        d="M4.447 4.818h14.062c.164 0 .328.01.491.031a2.9 2.9 0 00-3.406-2.441L4.03 4.382h-.013a2.9 2.9 0 00-1.805 1.149 3.848 3.848 0 012.236-.713zM18.51 5.875H4.446a2.816 2.816 0 00-2.813 2.812v8.438a2.816 2.816 0 002.813 2.812h14.062a2.815 2.815 0 002.813-2.812V8.687a2.815 2.815 0 00-2.813-2.812zm-2.088 8.437a1.406 1.406 0 110-2.811 1.406 1.406 0 010 2.811z"
+        stroke="currentColor"
+        fill="transparent"
+        d="M11.25 2.109a9.14 9.14 0 100 18.281 9.14 9.14 0 000-18.281z"
+        strokeWidth=".75"
+        strokeMiterlimit="10"
       />
       <path
-        fill="currentColor"
-        d="M1.656 11.651V7.28c0-.952.528-2.549 2.358-2.895 1.553-.291 3.091-.291 3.091-.291s1.011.703.176.703-.813 1.077 0 1.077 0 1.032 0 1.032L4.007 10.62l-2.35 1.032z"
+        stroke="currentColor"
+        fill="transparent"
+        d="M11.25 2.109C8.698 2.109 6.3 6.2 6.3 11.249c0 5.048 2.4 9.14 4.951 9.14 2.552 0 4.951-4.092 4.951-9.14 0-5.048-2.399-9.14-4.95-9.14z"
+        strokeWidth=".75"
+        strokeMiterlimit="10"
+      />
+      <path
+        stroke="currentColor"
+        fill="transparent"
+        d="M5.156 5.156C6.836 6.349 8.952 7.06 11.25 7.06c2.298 0 4.414-.711 6.094-1.904"
+      />
+      <path
+        stroke="currentColor"
+        fill="transparent"
+        d="M5.156 5.156C6.836 6.349 8.952 7.06 11.25 7.06c2.298 0 4.414-.711 6.094-1.904M17.344 17.344c-1.68-1.193-3.796-1.904-6.094-1.904-2.298 0-4.413.711-6.094 1.904"
+        strokeWidth=".75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        stroke="currentColor"
+        fill="transparent"
+        d="M11.25 2.109v18.28M20.39 11.249H2.11"
+        strokeWidth=".75"
+        strokeMiterlimit="10"
       />
     </g>
   ),
