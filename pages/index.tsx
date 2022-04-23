@@ -2,7 +2,12 @@ import Head from 'next/head';
 import { LayoutPage } from '../types/ui';
 import { Flex, Heading, SimpleGrid, useColorModeValue } from '@chakra-ui/react';
 import Card from '../components/card/Card';
-import { GlobeIcon } from '../components/icons/Icons';
+import {
+  GlobeIcon,
+  ProfileIcon,
+  RocketIcon,
+  DocumentIcon,
+} from '../components/icons/Icons';
 
 const Home: LayoutPage = () => {
   const iconBoxInside = useColorModeValue('white', 'white');
@@ -19,7 +24,7 @@ const Home: LayoutPage = () => {
           <Card
             title="Total Collections"
             data="6"
-            icon={<GlobeIcon h={'24px'} w={'24px'} color={iconBoxInside} />}
+            icon={<DocumentIcon h={'24px'} w={'24px'} color={iconBoxInside} />}
           />
           <Card
             title="Total Links"
@@ -29,12 +34,12 @@ const Home: LayoutPage = () => {
           <Card
             title="Total Views"
             data="8"
-            icon={<GlobeIcon h={'24px'} w={'24px'} color={iconBoxInside} />}
+            icon={<RocketIcon h={'24px'} w={'24px'} color={iconBoxInside} />}
           />
           <Card
             title="Total Profile Views"
             data="4"
-            icon={<GlobeIcon h={'24px'} w={'24px'} color={iconBoxInside} />}
+            icon={<ProfileIcon h={'24px'} w={'24px'} color={iconBoxInside} />}
           />
         </SimpleGrid>
       </Flex>
