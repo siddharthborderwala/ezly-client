@@ -13,7 +13,7 @@ import IconBox from '../icons/IconBox';
 
 import React, { ReactNode } from 'react';
 
-const Card: React.FC<{ title: string; data: string; icon: ReactNode }> = (
+const Card: React.FC<{ title: string; data: number; icon: ReactNode }> = (
   props
 ) => {
   const iconTeal = useColorModeValue('teal.400', 'teal.400');
