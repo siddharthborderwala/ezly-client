@@ -46,11 +46,11 @@ export type ProfileType = {
 
 const getDefaultPageData = (username: string): ProfileBody => ({
   meta: {
-    background: defaultBgColor,
-    image: `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${username}`,
+    background: '',
+    image: '',
     username,
     description: '',
-    font: 'Inter',
+    font: '',
   },
   socials: [],
   links: [],
