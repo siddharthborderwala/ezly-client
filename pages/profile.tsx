@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Avatar,
-  Box,
   Button,
   Flex,
   Grid,
-  Heading,
   Text,
+  chakra,
+  useToast,
+  Spinner,
+  Center,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Heading,
 } from '@chakra-ui/react';
 import produce from 'immer';
 import { HslaStringColorPicker } from 'react-colorful';
@@ -19,74 +26,147 @@ import CreateLinkMaker from '../components/CreateLinkMaker';
 import { LayoutPage } from '../types/ui';
 import Head from 'next/head';
 import { Globe } from 'phosphor-react';
-
-export enum SocialPlatforms {
-  FACEBOOK = 'facebook',
-  INSTGRAMS = 'instagram',
-  LINKEDIN = 'linkedin',
-  YOUTUBE = 'youtube',
-}
-
-export type BackgroundType = 'solid' | 'gradient';
-
-export type SocialBlock = {
-  platform: SocialPlatforms;
-  url: string;
-};
-
-export type LinkBlock = {
-  id: string;
-  title: string;
-  url: string;
-};
-
-export interface IPageData {
-  meta: {
-    username: string;
-    image: string;
-    background: string;
-  } & Record<string, unknown>;
-  socials: SocialBlock[];
-  links: LinkBlock[];
-}
+import renderHTML, { Body as ProfileBody } from 'ezly-render-html';
+import useDebounce from '../hooks/useDebounce';
+import axios from 'axios';
+import { useAuth } from '../contexts/auth';
+import { withProtection } from '../hoc/with-protection';
+import UpdateFont from '../components/UpdateFont';
+import { ChevronDownIcon } from '@chakra-ui/icons';
+import UpdateBackground from '../components/UpdateBackground';
 
 const defaultBgColor = 'hsla(0, 0%, 100%, 1)';
 
-const initialPageData: IPageData = {
-  meta: {
-    background: defaultBgColor,
-    image: 'https://d29fhpw069ctt2.cloudfront.net/icon/image/38760/preview.svg',
-    username: 'username',
-  },
-  socials: [],
-  links: [
-    {
-      id: nanoid(),
-      title: 'Example Link Title',
-      url: 'https://example.com',
-    },
-  ],
+export type ProfileType = {
+  username: string;
+  savedVersion: number;
+  publishedVersion: number;
+  body: ProfileBody;
 };
 
-{
-  /* <HslaStringColorPicker
-            color={pageData.meta.background}
-            onChange={(newColor) => {
-              setPageData(
-                produce((draft) => {
-                  if (draft.meta.background) {
-                    draft.meta.background = newColor;
-                  } else {
-                    draft.meta.background = defaultBgColor;
-                  }
-                })
-              );
-            }}
-          /> */
-}
+const getDefaultPageData = (username: string): ProfileBody => ({
+  meta: {
+    background: defaultBgColor,
+    image: `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${username}`,
+    username,
+    description: '',
+    font: 'Inter',
+  },
+  socials: [],
+  links: [],
+});
 
-const Maker: LayoutPage = () => {
-  const [pageData, setPageData] = useState<IPageData>(initialPageData);
+const Maker: React.FC = () => {
+  const { user } = useAuth();
+  const toast = useToast();
+  const [unsaved, setUnsaved] = useState(false);
+  const [profileLoading, setProfileLoading] = useState(true);
+  const [pageData, setPageData] = useState<ProfileBody>(
+    getDefaultPageData(user!.username)
+  );
+
+  const wrappedSetPageData = (
+    args: Parameters<React.Dispatch<React.SetStateAction<ProfileBody>>>[0]
+  ) => {
+    setPageData(args);
+    setUnsaved(true);
+  };
+
+  const handlePublish = async () => {
+    const toastId = toast({
+      title: (
+        <Flex alignItems="center" justifyContent="space-between">
+          <Text>Publishing profile</Text>
+          <Spinner />
+        </Flex>
+      ),
+      duration: null,
+      status: 'info',
+    });
+
+    try {
+      await axios.post(`/v1/profile/${user!.username}/publish`);
+      toast({
+        title: 'Profile published',
+        status: 'success',
+      });
+    } catch (err) {
+      toast({
+        title: 'Failed to publish profile',
+        status: 'error',
+      });
+    } finally {
+      if (toastId) {
+        toast.close(toastId);
+      }
+    }
+  };
+
+  const handleOnSave = () => {
+    const toastId = toast({
+      title: (
+        <Flex alignItems="center" justifyContent="space-between">
+          <Text>Saving profile</Text>
+          <Spinner />
+        </Flex>
+      ),
+      duration: null,
+      status: 'info',
+    });
+
+    axios
+      .patch<{ profile: { body: ProfileBody } }>(
+        `/v1/profile/${user!.username}`,
+        {
+          body: pageData,
+        }
+      )
+      .then((res) => {
+        setPageData(res.data.profile.body);
+        toast({
+          title: 'Profile saved',
+          status: 'success',
+        });
+        setUnsaved(false);
+      })
+      .catch(() => {
+        toast({
+          title: 'Failed to save profile',
+          status: 'error',
+        });
+      })
+      .finally(() => {
+        if (toastId) {
+          toast.close(toastId);
+        }
+      });
+  };
+
+  useEffect(() => {
+    axios
+      .get<{ profile: ProfileType }>(`/v1/profile/${user!.username}`)
+      .then((res) => {
+        setPageData(res.data.profile.body);
+      })
+      .catch(() => {
+        toast({
+          title: 'Failed to load profile',
+          status: 'error',
+        });
+      })
+      .finally(() => {
+        setProfileLoading(false);
+      });
+  }, [toast, user]);
+
+  if (profileLoading) {
+    return (
+      <Center flexDirection="column">
+        <Text>Loading Profile</Text>
+        <Spinner mt="4" />
+      </Center>
+    );
+  }
 
   return (
     <>
@@ -103,35 +183,131 @@ const Maker: LayoutPage = () => {
                 padding="1"
                 background="gray.50"
                 shadow="md"
+                mr="auto"
               />
-              <ModalContainer heading="Update Profile Image">
-                <ImageUpload setPageData={setPageData} pageData={pageData} />
-              </ModalContainer>
+              <Button
+                className={unsaved ? 'pulsate' : ''}
+                ml="2"
+                onClick={handleOnSave}
+                disabled={!unsaved}
+              >
+                {unsaved ? 'Save Changes' : 'Changes Up To Date'}
+              </Button>
             </Flex>
 
-            <ModalContainer heading="Update/Add Socials">
-              <UpdateSocial pageData={pageData} setPageData={setPageData} />
-            </ModalContainer>
-
-            <ModalContainer heading="Create Link">
-              <CreateLinkMaker setPageData={setPageData} />
-            </ModalContainer>
+            <Flex justifyContent="space-between">
+              <Heading fontSize="1.5rem">Customize your profile</Heading>
+              <Menu>
+                <MenuButton
+                  variant="outline"
+                  as={Button}
+                  rightIcon={<ChevronDownIcon />}
+                >
+                  Options
+                </MenuButton>
+                <MenuList>
+                  <MenuItem>
+                    <ModalContainer unstyled heading="Update Profile Image">
+                      {(onClose) => (
+                        <ImageUpload
+                          onClose={onClose}
+                          setPageData={wrappedSetPageData}
+                          pageData={pageData}
+                        />
+                      )}
+                    </ModalContainer>
+                  </MenuItem>
+                  <MenuItem>
+                    <ModalContainer unstyled heading="Update/Add Socials">
+                      {(onClose) => (
+                        <UpdateSocial
+                          onClose={onClose}
+                          pageData={pageData}
+                          setPageData={wrappedSetPageData}
+                        />
+                      )}
+                    </ModalContainer>
+                  </MenuItem>
+                  <MenuItem>
+                    <ModalContainer unstyled heading="Update Font">
+                      {(onClose) => (
+                        <UpdateFont
+                          onClose={onClose}
+                          pageData={pageData}
+                          setPageData={wrappedSetPageData}
+                        />
+                      )}
+                    </ModalContainer>
+                  </MenuItem>
+                  <MenuItem>
+                    <ModalContainer unstyled heading="Set Background">
+                      {(onClose) => (
+                        <UpdateBackground
+                          onClose={onClose}
+                          pageData={pageData}
+                          setPageData={wrappedSetPageData}
+                        />
+                      )}
+                    </ModalContainer>
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            </Flex>
           </Flex>
-          <Reorder pageData={pageData} setPageData={setPageData} />
+
+          <Reorder pageData={pageData} setPageData={wrappedSetPageData}>
+            <Text fontWeight="bold" fontSize="1.25rem">
+              Your links
+            </Text>
+            <ModalContainer heading="Create Link">
+              {(onClose) => (
+                <CreateLinkMaker
+                  onClose={onClose}
+                  setPageData={wrappedSetPageData}
+                />
+              )}
+            </ModalContainer>
+          </Reorder>
         </Flex>
-        <Flex flexDirection="column">
-          <Flex alignItems="flex-end" justifyContent="space-between">
-            <Text>Preview your changes and publish them</Text>
-            <Button size="sm" rightIcon={<Globe weight="bold" />}>
+        <Flex
+          flexDirection="column"
+          borderLeft="1px"
+          pl="4"
+          borderColor="gray.300"
+        >
+          <Flex alignItems="flex-start" justifyContent="space-between">
+            <Text fontSize="1.1rem" fontWeight="bold">
+              Preview your changes and publish them
+            </Text>
+            <Button
+              size="sm"
+              rightIcon={<Globe weight="bold" />}
+              onClick={handlePublish}
+              ml="4"
+            >
               Publish
             </Button>
           </Flex>
+          <chakra.iframe
+            border="2px"
+            flex="1"
+            srcDoc={renderHTML(pageData)}
+            mt="12"
+            mb="4"
+            width="70%"
+            maxWidth="375px"
+            mx="auto"
+            overflow="auto"
+            borderRadius="16"
+          ></chakra.iframe>
         </Flex>
       </Grid>
     </>
   );
 };
 
-Maker.layout = 'dashboard';
+const MakerPage = withProtection(Maker) as LayoutPage;
 
-export default Maker;
+MakerPage.layout = 'dashboard';
+
+export default MakerPage;

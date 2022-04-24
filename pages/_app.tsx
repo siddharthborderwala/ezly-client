@@ -9,6 +9,7 @@ import {
 import { layoutsMap } from '../layouts';
 import { AuthProvider } from '../contexts/auth';
 import useDevAuthPlugin from '../hooks/useDevAuthPlugin';
+import '../styles.css';
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_BASE_URL as string;
 axios.defaults.withCredentials = process.env.NODE_ENV === 'production';
@@ -41,6 +42,7 @@ const MyApp: React.FC<CustomAppProps> = ({ Component, pageProps }) => {
     <ChakraProvider theme={chakraTheme}>
       <AuthProvider>
         <Layout>
+          {/** @ts-ignore */}
           <Component {...pageProps} />
         </Layout>
       </AuthProvider>

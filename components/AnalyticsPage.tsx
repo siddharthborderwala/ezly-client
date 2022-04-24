@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import CountryVisualization from './CountryVisualization';
-import PieChart from './PieChart';
+import Link from 'next/link';
 import {
   ChakraProvider,
   Box,
@@ -14,6 +13,9 @@ import {
   Center,
   useColorModeValue,
 } from '@chakra-ui/react';
+import CountryVisualization from './CountryVisualization';
+import PieChart from './PieChart';
+import { ChevronRightIcon } from '@chakra-ui/icons';
 
 interface linkStat {
   url: string;
@@ -21,24 +23,12 @@ interface linkStat {
   clicks: number;
   collection: string;
   analytics: {
-    countries: {
-      [key: string]: any;
-    };
-    referers: {
-      [key: string]: any;
-    };
-    devices: {
-      [key: string]: any;
-    };
-    operatingSystems: {
-      [key: string]: any;
-    };
-    browsers: {
-      [key: string]: any;
-    };
-    langauges: {
-      [key: string]: any;
-    };
+    countries: Record<string, any>;
+    referers: Record<string, any>;
+    devices: Record<string, any>;
+    operatingSystems: Record<string, any>;
+    browsers: Record<string, any>;
+    langauges: Record<string, any>;
   };
 }
 
@@ -101,19 +91,22 @@ const AnalyticsPage: React.FC<{ alias: string; collection: string }> = (
         <ChakraProvider resetCSS>
           <Box width="full" height="full">
             <Flex justifyContent="space-between" m="2" p="2">
-              <Breadcrumb>
+              <Breadcrumb
+                spacing="2"
+                separator={<ChevronRightIcon color="gray.500" />}
+              >
                 <BreadcrumbItem color={mainText}>
                   <BreadcrumbLink href="/collections">
-                    Collections
+                    collections
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbItem color={secondaryText}>
-                  <BreadcrumbLink href={`/collections/${props.collection}`}>
-                    {props.collection}
-                  </BreadcrumbLink>
+                  <Link href={`/collections/${props.collection}`} passHref>
+                    <BreadcrumbLink>{props.collection}</BreadcrumbLink>
+                  </Link>
                 </BreadcrumbItem>
                 <BreadcrumbItem color={mainText}>
-                  <Text>Analytics</Text>
+                  <Text>analytics</Text>
                 </BreadcrumbItem>
                 <BreadcrumbItem color={mainText}>
                   <BreadcrumbLink

@@ -19,12 +19,14 @@ import {
   SignOut,
   User,
 } from 'phosphor-react';
+import { useAuth } from '../../contexts/auth';
 
 const Sidebar = () => {
   const { isOpen, onToggle } = useDisclosure({
     defaultIsOpen: true,
   });
   const { pathname } = useRouter();
+  const { logout } = useAuth();
 
   const activeTabName = useMemo(() => pathname.split('/')[1], [pathname]);
 
@@ -89,7 +91,7 @@ const Sidebar = () => {
           >
             Collapse Sidebar
           </Button>
-          <Button leftIcon={<SignOut weight="bold" />} mt="4">
+          <Button onClick={logout} leftIcon={<SignOut weight="bold" />} mt="4">
             Sign Out
           </Button>
         </>
@@ -111,6 +113,7 @@ const Sidebar = () => {
               mt={isOpen ? '4' : '2'}
               aria-label="Sign out"
               size="sm"
+              onClick={logout}
             />
           </Tooltip>
         </>

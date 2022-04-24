@@ -3,8 +3,10 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { LayoutPage } from '../../../../types/ui';
 import AnalyticsPage from '../../../../components/AnalyticsPage';
+import { NextPage } from 'next';
+import { withProtection } from '../../../../hoc/with-protection';
 
-const AnalyticsItemPage: LayoutPage = () => {
+const AnalyticsItem: NextPage = () => {
   const { linkAlias } = useRouter().query as any;
   const { name } = useRouter().query as any;
   return (
@@ -16,6 +18,8 @@ const AnalyticsItemPage: LayoutPage = () => {
     </>
   );
 };
+
+const AnalyticsItemPage = withProtection(AnalyticsItem) as LayoutPage;
 
 AnalyticsItemPage.layout = 'dashboard';
 

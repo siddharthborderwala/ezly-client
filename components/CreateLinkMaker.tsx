@@ -1,9 +1,15 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Input, Button, useToast } from '@chakra-ui/react';
+import {
+  Input,
+  Button,
+  useToast,
+  FormControl,
+  FormLabel,
+} from '@chakra-ui/react';
 import { nanoid } from 'nanoid';
-import { IPageData } from '../pages/profile';
 import produce from 'immer';
+import { Body as ProfileBody } from 'ezly-render-html';
 
 function isValidUrl(_string: string) {
   const matchpattern =
@@ -12,11 +18,15 @@ function isValidUrl(_string: string) {
 }
 
 type CreateLinkMakerProps = {
-  setPageData: React.Dispatch<React.SetStateAction<IPageData>>;
-  pageData?: IPageData;
+  setPageData: React.Dispatch<React.SetStateAction<ProfileBody>>;
+  pageData?: ProfileBody;
+  onClose: () => void;
 };
 
-const CreateLinkMaker: React.FC<CreateLinkMakerProps> = ({ setPageData }) => {
+const CreateLinkMaker: React.FC<CreateLinkMakerProps> = ({
+  setPageData,
+  onClose,
+}) => {
   const toast = useToast();
 
   const [link, setLink] = useState('');
@@ -40,15 +50,13 @@ const CreateLinkMaker: React.FC<CreateLinkMakerProps> = ({ setPageData }) => {
         isAlias: false,
       });
 
-      console.log(data);
-
       // add to json
       setPageData(
         produce((draft) => {
           draft.links.push({
             id: nanoid(),
             title: name,
-            url: data.shortUrl,
+            url: `http://ezly.tech/${data.shortUrl}`,
           });
         })
       );
@@ -57,6 +65,7 @@ const CreateLinkMaker: React.FC<CreateLinkMakerProps> = ({ setPageData }) => {
         status: 'success',
         title: 'Short URL added successfully',
       });
+      onClose();
     } catch (err) {
       toast({
         status: 'error',
@@ -67,17 +76,34 @@ const CreateLinkMaker: React.FC<CreateLinkMakerProps> = ({ setPageData }) => {
 
   return (
     <div>
-      <Input
-        value={link}
-        onChange={(e) => setLink(e.target.value)}
-        placeholder="Input your link here"
-      />
-      <Input
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="input name of link here"
-      />
-      <Button onClick={handleSubmit}>Add Link</Button>
+      <FormControl isRequired>
+        <FormLabel htmlFor="new-link">URL</FormLabel>
+        <Input
+          id="new-link"
+          value={link}
+          onChange={(e) => setLink(e.target.value)}
+          placeholder="johndoe.com"
+        />
+      </FormControl>
+      <FormControl isRequired mt="4">
+        <FormLabel htmlFor="new-link-name">Link Title</FormLabel>
+        <Input
+          id="new-link-name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="John Doe's Portfolio"
+        />
+      </FormControl>
+      <Button
+        mt="6"
+        type="submit"
+        position="absolute"
+        bottom="4"
+        left="8"
+        onClick={handleSubmit}
+      >
+        Add Link
+      </Button>
     </div>
   );
 };

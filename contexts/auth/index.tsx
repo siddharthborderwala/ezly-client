@@ -12,6 +12,7 @@ import {
 type UserType = {
   id: string;
   email: string;
+  username: string;
 };
 
 type AuthResponsePayload = {
@@ -28,6 +29,7 @@ type AuthContextValue = {
   ) => Promise<AuthResponsePayload | undefined>;
   logout: () => Promise<void>;
   register: (
+    username: string,
     email: string,
     password: string,
     passwordConfirmation: string
@@ -39,7 +41,7 @@ const AuthContext = createContext<AuthContextValue>(null);
 export const AuthProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<UserType | null>(null);
   const [ready, setReady] = useState<boolean>(false);
-  const { replace } = useRouter();
+  const { replace, pathname } = useRouter();
 
   const getMe = useCallback(async () => {
     try {
@@ -57,10 +59,11 @@ export const AuthProvider: React.FC = ({ children }) => {
     } finally {
       setReady(true);
     }
-  }, []);
+  }, [setUser, setReady]);
 
   useEffect(() => {
-    getMe().catch(() => replace('/login'));
+    getMe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const value: AuthContextValue = {
@@ -72,6 +75,7 @@ export const AuthProvider: React.FC = ({ children }) => {
         localStorage.removeItem('token');
       }
       setUser(null);
+      replace('/login');
     },
     login: async (email: string, password: string) => {
       const res = await axios.post<AuthResponsePayload>('/v1/auth/login', {
@@ -85,11 +89,13 @@ export const AuthProvider: React.FC = ({ children }) => {
       return res.data;
     },
     register: async (
+      username: string,
       email: string,
       password: string,
       passwordConfirmation: string
     ) => {
       const res = await axios.post<AuthResponsePayload>('/v1/auth/register', {
+        username,
         email,
         password,
         passwordConfirmation,

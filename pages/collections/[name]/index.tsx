@@ -1,27 +1,31 @@
 import {
-    Box,
-    Button,
-    Divider,
-    Flex,
-    Heading,
-    Spacer,
-    Spinner,
-    Table, TableContainer,
-    Tbody, Th,
-    Thead,
-    Tr,
-    useToast
+  Box,
+  Button,
+  Divider,
+  Flex,
+  Heading,
+  Spacer,
+  Spinner,
+  Table,
+  TableContainer,
+  Tbody,
+  Th,
+  Thead,
+  Tr,
+  useToast,
 } from '@chakra-ui/react';
 import axios from 'axios';
+import { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import useSWR from 'swr';
 import CreateLink from '../../../components/links/CreateLink';
 import LinkItem from '../../../components/links/LinkItem';
+import { withProtection } from '../../../hoc/with-protection';
 import { LayoutPage } from '../../../types/ui';
 
-const CollectionItemPage: LayoutPage = () => {
+const CollectionItem: NextPage = () => {
   const { name } = useRouter().query as any;
   const [loading, setLoading] = useState(false);
 
@@ -112,6 +116,8 @@ const CollectionItemPage: LayoutPage = () => {
     </>
   );
 };
+
+const CollectionItemPage = withProtection(CollectionItem) as LayoutPage;
 
 CollectionItemPage.layout = 'dashboard';
 

@@ -1,7 +1,9 @@
+import { NextPage } from 'next';
 import Head from 'next/head';
+import { withProtection } from '../hoc/with-protection';
 import { LayoutPage } from '../types/ui';
 
-const Home: LayoutPage = () => {
+const Home: NextPage = () => {
   return (
     <>
       <Head>
@@ -14,6 +16,8 @@ const Home: LayoutPage = () => {
   );
 };
 
-Home.layout = 'dashboard';
+const HomePage = withProtection(Home) as LayoutPage;
 
-export default Home;
+HomePage.layout = 'dashboard';
+
+export default HomePage;

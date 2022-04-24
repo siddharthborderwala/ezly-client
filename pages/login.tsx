@@ -12,12 +12,13 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../contexts/auth';
 
 const Form = chakra.form;
 
 const LoginPage: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const { login, user } = useAuth();
   const { replace } = useRouter();
   const toast = useToast();
@@ -30,6 +31,7 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
     e.persist();
     const data = Object.fromEntries(new FormData(e.currentTarget).entries());
+    setIsLoading(true);
     try {
       await login(data.email.toString(), data.password.toString());
       replace('/');
@@ -38,6 +40,8 @@ const LoginPage: React.FC = () => {
         status: 'error',
         title: 'Invalid credentials',
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -63,7 +67,7 @@ const LoginPage: React.FC = () => {
               placeholder="password"
             />
           </FormControl>
-          <Button variant="solid" type="submit">
+          <Button isLoading={isLoading} variant="solid" type="submit">
             Login
           </Button>
         </Form>

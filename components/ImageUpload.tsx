@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { IPageData } from '../pages/profile';
 import produce from 'immer';
 import { nanoid } from 'nanoid';
+import { Body as ProfileBody } from 'ezly-render-html';
+import { Button, Input } from '@chakra-ui/react';
 
 const getFileExtension = (fileName: string) => {
   const splits = fileName.split('.');
@@ -10,12 +11,14 @@ const getFileExtension = (fileName: string) => {
 };
 
 interface ImageUploadProps {
-  setPageData: React.Dispatch<React.SetStateAction<IPageData>>;
-  pageData?: IPageData;
+  setPageData: React.Dispatch<React.SetStateAction<ProfileBody>>;
+  pageData?: ProfileBody;
+  onClose: () => void;
 }
 
-const ImageUpload = ({ setPageData }: ImageUploadProps) => {
+const ImageUpload: React.FC<ImageUploadProps> = ({ setPageData, onClose }) => {
   const [file, setFile] = useState<File | FileList | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   function handleChange(event: any) {
     setFile(event.target.files[0]);
@@ -26,6 +29,7 @@ const ImageUpload = ({ setPageData }: ImageUploadProps) => {
       if (!file) {
         return;
       }
+      setIsLoading(true);
 
       const extension = getFileExtension((file as any).name);
       const url = await (await axios.get(`/v1/image/${extension}`)).data;
@@ -45,17 +49,28 @@ const ImageUpload = ({ setPageData }: ImageUploadProps) => {
           draft.meta.image = imageUrl;
         })
       );
+      setIsLoading(false);
+      onClose();
     } catch (err) {
+      setIsLoading(false);
       console.log(err);
     }
   }
 
   return (
     <div>
-      <input type="file" name="file" onChange={(e) => handleChange(e)} />
-      <div>
-        <button onClick={handleSubmission}>Submit</button>
-      </div>
+      <Input pt="1" type="file" name="file" onChange={(e) => handleChange(e)} />
+      <Button
+        isLoading={isLoading}
+        mt="6"
+        type="submit"
+        position="absolute"
+        bottom="4"
+        left="8"
+        onClick={handleSubmission}
+      >
+        Submit
+      </Button>
     </div>
   );
 };

@@ -7,8 +7,10 @@ import React, { useState } from 'react';
 import useSWR from 'swr';
 import CreateCollection from '../../components/collections/CreateCollection';
 import { LayoutPage } from '../../types/ui';
+import { withProtection } from '../../hoc/with-protection';
+import { NextPage } from 'next';
 
-const CollectionsList: LayoutPage = () => {
+const CollectionsList: NextPage = () => {
   const { data, error } = useSWR('/v1/collections/all', axios);
 
   const [show, setShow] = useState(false);
@@ -77,6 +79,8 @@ const CollectionsList: LayoutPage = () => {
   );
 };
 
-CollectionsList.layout = 'dashboard';
+const CollectionsListPage = withProtection(CollectionsList) as LayoutPage;
 
-export default CollectionsList;
+CollectionsListPage.layout = 'dashboard';
+
+export default CollectionsListPage;
