@@ -37,8 +37,7 @@ const RegisterPage: React.FC = () => {
         data.username.toString(),
         data.email.toString(),
         data.password.toString(),
-        data.passwordConfirmation.toString(),
-        data.username.toString()
+        data.passwordConfirmation.toString()
       );
       replace('/');
     } catch (error) {
@@ -74,15 +73,6 @@ const RegisterPage: React.FC = () => {
             />
           </FormControl>
           <FormControl>
-            <FormLabel htmlFor="username">Username</FormLabel>
-            <Input
-              type="text"
-              name="username"
-              id="username"
-              placeholder="johndoe"
-            />
-          </FormControl>
-          <FormControl>
             <FormLabel htmlFor="password">Password</FormLabel>
             <Input
               type="password"
@@ -102,7 +92,7 @@ const RegisterPage: React.FC = () => {
               placeholder="password"
             />
           </FormControl>
-          <Button variant="solid" type="submit">
+          <Button variant="solid" type="submit" isLoading={isLoading}>
             Register
           </Button>
         </Form>
