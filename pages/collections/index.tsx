@@ -1,5 +1,13 @@
-import { Box, Divider, Heading, Spinner, Spacer, Flex } from '@chakra-ui/react';
-import { AddIcon } from '@chakra-ui/icons';
+import {
+  Box,
+  Divider,
+  Heading,
+  Spinner,
+  Spacer,
+  Flex,
+  Button,
+  Link as ChakraLink,
+} from '@chakra-ui/react';
 import axios from 'axios';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -9,6 +17,8 @@ import CreateCollection from '../../components/collections/CreateCollection';
 import { LayoutPage } from '../../types/ui';
 import { withProtection } from '../../hoc/with-protection';
 import { NextPage } from 'next';
+import { Plus } from 'phosphor-react';
+import Link from 'next/link';
 
 const CollectionsList: NextPage = () => {
   const { data, error } = useSWR('/v1/collections/all', axios);
@@ -34,7 +44,7 @@ const CollectionsList: NextPage = () => {
   }
 
   function handleClick(collectionName: string) {
-    router.push(`/collections/${collectionName}`);
+    router.push(``);
   }
 
   return (
@@ -46,34 +56,40 @@ const CollectionsList: NextPage = () => {
       <Flex alignItems="center" justifyContent="center">
         <Heading>Collections</Heading>
         <Spacer />
-        <AddIcon
+        <Button
+          variant="outline"
+          leftIcon={<Plus weight="bold" />}
           onClick={() => setShow(!show)}
-          boxSize="1.5em"
-          cursor="pointer"
-        />
+          size="sm"
+        >
+          New Collection
+        </Button>
       </Flex>
 
-      <Divider />
+      <Divider mt="2" mb="4" />
 
       {show && <CreateCollection setShow={setShow} />}
 
       {data?.data.collections.map((collection: any) => (
-        <Box
+        <Link
+          passHref
           key={collection.id}
-          padding="4"
-          border="1px"
-          marginTop="2"
-          maxWidth="30%"
-          borderColor="gray.200"
-          borderRadius="2xl"
-          backgroundColor="gray.50"
-          fontWeight="semibold"
-          cursor="pointer"
-          id={collection.id}
-          onClick={() => handleClick(collection.name)}
+          href={`/collections/${collection.name}`}
         >
-          {collection.name}
-        </Box>
+          <ChakraLink
+            display="block"
+            padding="4"
+            border="1px"
+            marginTop="2"
+            maxWidth="30%"
+            borderColor="gray.200"
+            borderRadius="2xl"
+            backgroundColor="gray.50"
+            fontWeight="semibold"
+          >
+            {collection.name}
+          </ChakraLink>
+        </Link>
       ))}
     </>
   );

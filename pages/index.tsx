@@ -55,7 +55,7 @@ const Home: NextPage = () => {
       .finally(() => {
         setLoading(false);
       });
-  });
+  }, []);
 
   const iconBoxInside = useColorModeValue('white', 'white');
 

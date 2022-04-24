@@ -6,8 +6,14 @@ import {
   Button,
   Flex,
   Box,
+  Switch,
+  FormControl,
+  FormLabel,
+  IconButton,
+  Tooltip,
 } from '@chakra-ui/react';
 import axios from 'axios';
+import { Plus } from 'phosphor-react';
 import { useState } from 'react';
 import { useSWRConfig } from 'swr';
 import validator from 'validator';
@@ -54,7 +60,7 @@ const CreateLink: React.FC<CreateLink> = ({ collectionName }) => {
     }
 
     try {
-      const res = await axios.post(`v1/links/`, {
+      await axios.post(`v1/links/`, {
         alias,
         url,
         collectionName,
@@ -82,35 +88,47 @@ const CreateLink: React.FC<CreateLink> = ({ collectionName }) => {
 
   return (
     <Box margin="2">
-      <Heading size="lg" marginTop="4" marginBottom="2">
+      <Heading size="md" marginTop="4" marginBottom="2">
         Create Link
       </Heading>
 
-      <Input placeholder="link here" onChange={(e) => setUrl(e.target.value)} />
+      <Input
+        placeholder="Enter your link here"
+        onChange={(e) => setUrl(e.target.value)}
+      />
 
-      <Flex marginBottom="2" marginTop="2" alignItems="center">
-        <Checkbox
-          isChecked={isAlias}
-          onChange={(e) => setIsAlias(e.target.checked)}
-          display="block"
-          width="150px"
-        >
-          Set Alias?
-        </Checkbox>
+      <Flex
+        marginBottom="2"
+        marginTop="2"
+        alignItems="center"
+        justifyContent="space-between"
+      >
+        <FormControl display="inline-flex" alignItems="center">
+          <Switch
+            id="set-alias"
+            mr="2"
+            isChecked={isAlias}
+            onChange={(e) => setIsAlias(e.target.checked)}
+          />
+          <FormLabel htmlFor="set-alias" margin="0">
+            Set Alias?
+          </FormLabel>
+        </FormControl>
         <Input
           placeholder="alias here"
           isDisabled={!isAlias}
           onChange={(e) => setAlias(e.target.value)}
         />
+        <Tooltip label="Create Link">
+          <IconButton
+            ml="4"
+            disabled={loading}
+            onClick={handleCreateLink}
+            icon={<Plus weight="bold" />}
+            aria-label="Create Link"
+          />
+        </Tooltip>
       </Flex>
-
-      <Button
-        disabled={loading}
-        onClick={(e) => handleCreateLink()}
-        width="100%"
-      >
-        Create Link
-      </Button>
     </Box>
   );
 };

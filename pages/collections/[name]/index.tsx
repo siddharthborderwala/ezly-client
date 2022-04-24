@@ -1,3 +1,4 @@
+import { DeleteIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
@@ -13,6 +14,7 @@ import {
   Thead,
   Tr,
   useToast,
+  Text,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { NextPage } from 'next';
@@ -81,37 +83,50 @@ const CollectionItem: NextPage = () => {
       <Head>
         <title>Collection {name}</title>
       </Head>
-      <Flex>
+      <Flex alignItems="center">
         <Heading padding="2">{data.data.collection.name}</Heading>
-        <Spacer />
-        <Button onClick={handleDelete}>Delete Collection</Button>
+        <Button
+          colorScheme="red"
+          ml="auto"
+          leftIcon={<DeleteIcon />}
+          onClick={handleDelete}
+        >
+          Delete Collection
+        </Button>
       </Flex>
       <Box padding="2">
         <Divider />
         <CreateLink collectionName={name} />
-        <Divider />
-        <TableContainer>
-          <Table variant="striped" colorScheme="teal">
-            <Thead>
-              <Tr>
-                <Th>URL</Th>
-                <Th>Short Url</Th>
-                <Th>Analytics</Th>
-                <Th>Delete</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {data.data.collection.links.map((link: any) => (
-                <LinkItem
-                  key={link.id}
-                  id={link.id}
-                  linkData={link}
-                  collectionName={name}
-                />
-              ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
+        <Divider my="8" />
+
+        {data.data.collection.links.length === 0 ? (
+          <Text width="full" textAlign="center">
+            No links to view
+          </Text>
+        ) : (
+          <TableContainer>
+            <Table variant="striped" colorScheme="teal">
+              <Thead>
+                <Tr>
+                  <Th>URL</Th>
+                  <Th>Short Url</Th>
+                  <Th>Analytics</Th>
+                  <Th>Delete</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {data.data.collection.links.map((link: any) => (
+                  <LinkItem
+                    key={link.id}
+                    id={link.id}
+                    linkData={link}
+                    collectionName={name}
+                  />
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        )}
       </Box>
     </>
   );

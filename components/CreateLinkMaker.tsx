@@ -56,7 +56,7 @@ const CreateLinkMaker: React.FC<CreateLinkMakerProps> = ({
           draft.links.push({
             id: nanoid(),
             title: name,
-            url: `http://ezly.tech/${data.shortUrl}`,
+            url: `https://ezly.tech/${data.shortUrl}`,
           });
         })
       );
