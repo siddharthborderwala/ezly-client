@@ -32,7 +32,8 @@ type AuthContextValue = {
     username: string,
     email: string,
     password: string,
-    passwordConfirmation: string
+    passwordConfirmation: string,
+    username: string
   ) => Promise<AuthResponsePayload | undefined>;
 } | null;
 
@@ -92,13 +93,15 @@ export const AuthProvider: React.FC = ({ children }) => {
       username: string,
       email: string,
       password: string,
-      passwordConfirmation: string
+      passwordConfirmation: string,
+      username: string
     ) => {
       const res = await axios.post<AuthResponsePayload>('/v1/auth/register', {
         username,
         email,
         password,
         passwordConfirmation,
+        username,
       });
       if (process.env.NODE_ENV === 'development') {
         localStorage.setItem('token', res.data.token);

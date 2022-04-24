@@ -2,9 +2,9 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { LayoutPage } from '../../../../types/ui';
-import AnalyticsPage from '../../../../components/AnalyticsPage';
 import { NextPage } from 'next';
 import { withProtection } from '../../../../hoc/with-protection';
+import AnalyticsPage from '../../../../components/analytics/AnalyticsPage';
 
 const AnalyticsItem: NextPage = () => {
   const { linkAlias } = useRouter().query as any;

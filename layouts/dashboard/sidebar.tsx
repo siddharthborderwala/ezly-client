@@ -62,18 +62,20 @@ const Sidebar = () => {
         experimental_spaceY={isOpen ? '2' : '4'}
         mt="16"
       >
+        <NavLink href="/" active={activeTabName === 'Dashboard'}>
+          <Tooltip label="Dashboard" hasArrow placement="right">
+            <ChartLineUp weight="bold" />
+          </Tooltip>
+          {isOpen && <Text ml="4">Dashboard</Text>}
+        </NavLink>
+
         <NavLink href="/collections" active={activeTabName === 'collections'}>
           <Tooltip label="Collections" hasArrow placement="right">
             <Folder weight="bold" />
           </Tooltip>
           {isOpen && <Text ml="4">Collections</Text>}
         </NavLink>
-        {/* <NavLink href="/analytics" active={activeTabName === 'analytics'}>
-          <Tooltip label="Analytics" hasArrow placement="right">
-            <ChartLineUp weight="bold" />
-          </Tooltip>
-          {isOpen && <Text ml="4">Analytics</Text>}
-        </NavLink> */}
+
         <NavLink href="/profile" active={activeTabName === 'profile'}>
           <Tooltip label="Profile" hasArrow placement="right">
             <User weight="bold" />
