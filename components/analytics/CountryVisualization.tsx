@@ -8,7 +8,7 @@ const CountryVisualization = ({ data }: { data: any }) => (
     features={countries.features}
     margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
     colors="nivo"
-    domain={[0, 1000]}
+    domain={[0, 120]}
     unknownColor="#666666"
     label="properties.name"
     valueFormat=".2s"
