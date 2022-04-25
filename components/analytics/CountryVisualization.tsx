@@ -2,6 +2,7 @@ import { ResponsiveChoropleth } from '@nivo/geo';
 import countries from './world_countries.json';
 
 const CountryVisualization = ({ data }: { data: any }) => (
+  // @ts-ignore
   <ResponsiveChoropleth
     data={data}
     features={countries.features}
