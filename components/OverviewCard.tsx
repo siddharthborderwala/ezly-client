@@ -28,6 +28,7 @@ const OverviewCard: React.FC<OverviewCardProps> = ({
     flex="1"
     background="gray.100"
     overflow="hidden"
+    shadow="sm"
   >
     <Flex alignItems="center" justifyContent="space-between" padding="4">
       <Center

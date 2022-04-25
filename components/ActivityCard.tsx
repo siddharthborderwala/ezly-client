@@ -32,6 +32,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ label, url, link }) => {
       flex="1"
       background="gray.100"
       overflow="hidden"
+      shadow="sm"
     >
       <Box padding="4" border="none" borderRadius="8">
         <Text fontWeight="bold">{label}</Text>
