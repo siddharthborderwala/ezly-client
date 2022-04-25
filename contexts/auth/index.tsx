@@ -82,9 +82,9 @@ export const AuthProvider: React.FC = ({ children }) => {
         email,
         password,
       });
-      if (process.env.NODE_ENV === 'development') {
-        localStorage.setItem('token', res.data.token);
-      }
+      // if (process.env.NODE_ENV === 'development') {
+      localStorage.setItem('token', res.data.token);
+      // }
       setUser(res.data.user);
       return res.data;
     },
@@ -100,9 +100,9 @@ export const AuthProvider: React.FC = ({ children }) => {
         password,
         passwordConfirmation,
       });
-      if (process.env.NODE_ENV === 'development') {
-        localStorage.setItem('token', res.data.token);
-      }
+      // if (process.env.NODE_ENV === 'development') {
+      localStorage.setItem('token', res.data.token);
+      // }
       setUser(res.data.user);
       return res.data;
     },
