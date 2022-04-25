@@ -138,7 +138,7 @@ const AnalyticsPage: React.FC<{ alias: string; collection: string }> = (
                 </BreadcrumbItem>
                 <BreadcrumbItem color={mainText}>
                   <BreadcrumbLink
-                    href={`https:\\\\ezly.tech\\${linkData.alias}`}
+                    href={`https://ezly.tech/${linkData.alias}`}
                     target="_blank"
                     color={secondaryText}
                   >
