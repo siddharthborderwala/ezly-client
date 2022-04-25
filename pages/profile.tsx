@@ -15,9 +15,6 @@ import {
   MenuList,
   Heading,
 } from '@chakra-ui/react';
-import produce from 'immer';
-import { HslaStringColorPicker } from 'react-colorful';
-import { nanoid } from 'nanoid';
 import ImageUpload from '../components/ImageUpload';
 import ModalContainer from '../components/ModalContainer';
 import UpdateSocial from '../components/UpdateSocial';
@@ -27,7 +24,6 @@ import { LayoutPage } from '../types/ui';
 import Head from 'next/head';
 import { Globe } from 'phosphor-react';
 import renderHTML, { Body as ProfileBody } from 'ezly-render-html';
-import useDebounce from '../hooks/useDebounce';
 import axios from 'axios';
 import { useAuth } from '../contexts/auth';
 import { withProtection } from '../hoc/with-protection';
