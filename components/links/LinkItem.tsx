@@ -1,6 +1,15 @@
-import { Button, Td, Tr, useToast } from '@chakra-ui/react';
+import {
+  Button,
+  IconButton,
+  Td,
+  Tooltip,
+  Tr,
+  useToast,
+  Link,
+} from '@chakra-ui/react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { ArrowSquareOut, Trash } from 'phosphor-react';
 import React from 'react';
 import { mutate } from 'swr';
 
@@ -52,15 +61,37 @@ const LinkItem: React.FC<LinkItemProps> = ({
   return (
     <Tr>
       <Td>{linkData.url}</Td>
-      <Td paddingLeft="4">{linkData.short_url}</Td>
+      <Td paddingLeft="4">
+        <Link
+          target="_blank"
+          rel="noopener noreferrer"
+          href={`https://ezly.tech/${linkData.short_url}`}
+        >
+          https://ezly.tech/{linkData.short_url}
+        </Link>
+      </Td>
       <Td>
-        <Button onClick={() => handleAnalytics(linkData.short_url)}>
-          Analytics
-        </Button>
+        <Tooltip label="View Analytics">
+          <IconButton
+            icon={<ArrowSquareOut weight="bold" />}
+            variant="outline"
+            onClick={() => handleAnalytics(linkData.short_url)}
+            aria-label="View analytics"
+          >
+            Analytics
+          </IconButton>
+        </Tooltip>
       </Td>
 
       <Td>
-        <Button onClick={handleDelete}>Delete</Button>
+        <Tooltip label="Delete Link">
+          <IconButton
+            icon={<Trash weight="bold" />}
+            aria-label="Delete link"
+            colorScheme="red"
+            onClick={handleDelete}
+          />
+        </Tooltip>
       </Td>
     </Tr>
   );

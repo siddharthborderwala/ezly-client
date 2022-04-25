@@ -62,7 +62,7 @@ const Sidebar = () => {
         experimental_spaceY={isOpen ? '2' : '4'}
         mt="16"
       >
-        <NavLink href="/" active={activeTabName === 'Dashboard'}>
+        <NavLink href="/" active={activeTabName === ''}>
           <Tooltip label="Dashboard" hasArrow placement="right">
             <ChartLineUp weight="bold" />
           </Tooltip>

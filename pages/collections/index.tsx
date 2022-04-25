@@ -7,10 +7,10 @@ import {
   Flex,
   Button,
   Link as ChakraLink,
+  Center,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import useSWR from 'swr';
 import CreateCollection from '../../components/collections/CreateCollection';
@@ -21,11 +21,8 @@ import { Plus } from 'phosphor-react';
 import Link from 'next/link';
 
 const CollectionsList: NextPage = () => {
-  const { data, error } = useSWR('/v1/collections/all', axios);
-
   const [show, setShow] = useState(false);
-
-  const router = useRouter();
+  const { data, error } = useSWR('/v1/collections/all', axios);
 
   if (error) {
     return <>Failed to load</>;
@@ -33,18 +30,10 @@ const CollectionsList: NextPage = () => {
 
   if (!data) {
     return (
-      <Spinner
-        thickness="4px"
-        speed="0.65s"
-        emptyColor="gray.200"
-        color="blue.500"
-        size="xl"
-      />
+      <Center height="full" width="full">
+        <Spinner />
+      </Center>
     );
-  }
-
-  function handleClick(collectionName: string) {
-    router.push(``);
   }
 
   return (

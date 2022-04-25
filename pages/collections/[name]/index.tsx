@@ -1,11 +1,9 @@
-import { DeleteIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
   Divider,
   Flex,
   Heading,
-  Spacer,
   Spinner,
   Table,
   TableContainer,
@@ -15,11 +13,13 @@ import {
   Tr,
   useToast,
   Text,
+  Center,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { Trash } from 'phosphor-react';
 import React, { useState } from 'react';
 import useSWR from 'swr';
 import CreateLink from '../../../components/links/CreateLink';
@@ -36,22 +36,6 @@ const CollectionItem: NextPage = () => {
 
   const toast = useToast();
 
-  if (error) {
-    return <>Failed to load</>;
-  }
-
-  if (!data) {
-    return (
-      <Spinner
-        thickness="4px"
-        speed="0.65s"
-        emptyColor="gray.200"
-        color="blue.500"
-        size="xl"
-      />
-    );
-  }
-
   const handleDelete = async () => {
     setLoading(true);
 
@@ -60,7 +44,7 @@ const CollectionItem: NextPage = () => {
         method: 'delete',
         url: `/v1/collections`,
         data: {
-          collectionId: data.data.collection.id,
+          collectionId: data?.data.collection.id,
         },
       });
       toast({
@@ -78,6 +62,18 @@ const CollectionItem: NextPage = () => {
     }
   };
 
+  if (error) {
+    return <>Failed to load</>;
+  }
+
+  if (!data?.data.collection) {
+    return (
+      <Center height="full" width="full">
+        <Spinner />
+      </Center>
+    );
+  }
+
   return (
     <>
       <Head>
@@ -88,8 +84,9 @@ const CollectionItem: NextPage = () => {
         <Button
           colorScheme="red"
           ml="auto"
-          leftIcon={<DeleteIcon />}
+          leftIcon={<Trash weight="bold" />}
           onClick={handleDelete}
+          isLoading={loading}
         >
           Delete Collection
         </Button>
@@ -97,15 +94,14 @@ const CollectionItem: NextPage = () => {
       <Box padding="2">
         <Divider />
         <CreateLink collectionName={name} />
-        <Divider my="8" />
 
         {data.data.collection.links.length === 0 ? (
-          <Text width="full" textAlign="center">
+          <Text width="full" textAlign="center" mt="8">
             No links to view
           </Text>
         ) : (
-          <TableContainer>
-            <Table variant="striped" colorScheme="teal">
+          <TableContainer borderTop="1px" borderColor="teal.100" mt="8">
+            <Table colorScheme="teal">
               <Thead>
                 <Tr>
                   <Th>URL</Th>

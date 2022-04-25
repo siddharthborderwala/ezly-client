@@ -48,15 +48,14 @@ const CreateCollection: React.FC<CreateCollectionProps> = ({ setShow }) => {
 
   return (
     <>
-      <Heading marginTop="4" size="lg">
+      <Heading marginTop="4" fontSize="1.5rem">
         Create Collection
       </Heading>
       <Flex marginTop="1em" marginBottom="1em">
         <Input
           onChange={(e) => setName(e.target.value)}
-          placeholder="collection name here"
+          placeholder="Collection name here"
         />
-
         <Button isDisabled={loading} onClick={handleCreate} marginLeft="1em">
           Create Collection
         </Button>

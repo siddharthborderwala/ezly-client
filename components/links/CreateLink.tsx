@@ -97,12 +97,7 @@ const CreateLink: React.FC<CreateLink> = ({ collectionName }) => {
         onChange={(e) => setUrl(e.target.value)}
       />
 
-      <Flex
-        marginBottom="2"
-        marginTop="2"
-        alignItems="center"
-        justifyContent="space-between"
-      >
+      <Flex my="4" alignItems="center" justifyContent="space-between">
         <FormControl display="inline-flex" alignItems="center">
           <Switch
             id="set-alias"
@@ -111,7 +106,7 @@ const CreateLink: React.FC<CreateLink> = ({ collectionName }) => {
             onChange={(e) => setIsAlias(e.target.checked)}
           />
           <FormLabel htmlFor="set-alias" margin="0">
-            Set Alias?
+            Set Custom Alias?
           </FormLabel>
         </FormControl>
         <Input
