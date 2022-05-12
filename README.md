@@ -7,6 +7,8 @@ a digital presence.
 
 Ezly supports various features such as search engine optimization with social media integration, tracking of traffic statistics, and management of multiple URL tags.
 
+[Backend Repo](https://github.com/siddharthborderwala/ezly-server)
+
 # Features
 
 - URL Shortening
