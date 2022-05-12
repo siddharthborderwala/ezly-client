@@ -40,6 +40,14 @@ yarn dev
 
 ![screenshot](screenshots/img2.png)
 
+![screenshot](screenshots/img4.png)
+
 ![screenshot](screenshots/img3.png)
 
-![screenshot](screenshots/img4.png)
+![screenshot](screenshots/img5.png)
+
+# Team Members
+
+- [Siddharth Borderwala](https://github.com/siddharthborderwala)
+- [Aman Yadav](https://github.com/yadav-aman)
+- [Shagun Agrawal](https://github.com/standmarsh)
